@@ -17,11 +17,12 @@ ui <- fluidPage(
                  selectizeInput("input_field", "Input Field Name", choices = NULL, multiple = TRUE, options = list(create = TRUE)),
                  numericInput("max_tokens", "Max Tokens", value = 10),
                  layout_columns(col_widths = c(6,6),
-                                actionButton("generate_data", "Generate Data"),
-                                actionButton("clear_table", "Clear Fields"),
+                                actionButton("generate_data", "Generate Data", icon = icon("equalizer",lib = "glyphicon"), class = "btn-info"),
+                                actionButton("clear_table", "Clear Fields", icon = icon('broom'), class = "btn-info"),
                  ),
                  actionButton("config", "Enter API Key", icon = icon("link", lib = "glyphicon"),
-                              style = "color: #337ab7; background-color: #f9f9f9; border-color: #f9f9f9;"),
+                              # style = "color: #337ab7; background-color: #f9f9f9; border-color: #f9f9f9;"
+                              ),
                  hr(),
                  # theme picker
                  layout_columns(col_widths = c(2,10),
@@ -125,14 +126,16 @@ server <- function(input, output, session) {
         messages = list(
           list(role = "system", content = "You are a data generation tool."),
           list(role = "user", content = paste(
-            paste0("Generate ", input$max_tokens, " rows of data with fields: ", 
-                   paste(fields()$Field, collapse = ",")),
-            "--",
-            "Description of the data context: ", description,
-            "Return the data in comma-separated format using the fields as headers. Do not return anything other than the data. Do not return any data strings with commas."
+            paste0("Generate ", input$max_tokens, " rows of data."),
+            if (!is.null(description) && description != "") {
+              paste("--", "Description of the data context:", description)
+            } else "",
+            "--", "In addition to the data being generated, include data generated for the fields:", paste(fields()$Field, collapse = ", "),
+            "Return the data in comma-separated format using the fields as headers. Do not return anything other than the data. Do not include commas within data strings."
           ))
         )
       )
+      
       
       print(request_body)
       

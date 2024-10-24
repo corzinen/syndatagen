@@ -1,0 +1,12 @@
+name: datagen
+title: datagen
+username: exposurisk
+account: exposurisk
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 13116024
+bundleId: 9262335
+url: https://exposurisk.shinyapps.io/datagen/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

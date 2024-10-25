@@ -7,45 +7,54 @@ library(httr)
 library(jsonlite)
 
 # Define UI with dark mode switch and theme selector
-ui <- fluidPage(
+ui <- page_navbar(
   theme = bs_theme(bootswatch = "flatly"),  # Default theme
-  titlePanel("Synthetic Data Generator with OpenAI"),
+  # titlePanel("Synthetic Data Generator with OpenAI",
+  #            windowTitle = "SDG with OpenAI"),
+  title = tags$span(
+    tags$img(
+      src = "logo.jpeg",
+      width = "46px",
+      height = "auto",
+      class = "me-3"
+      ),
+    "Synthetic Data Generator with OpenAI"
+  ),
+    nav_spacer(), # push nav items to the right
+    nav_item(input_dark_mode(id = "dark_mode", mode = "dark")),
   
-  sidebarLayout(
-    sidebarPanel(width = 3,
-                 textInput("description", "Description (optional)", placeholder = "e.g., Windows event logs"),
-                 selectizeInput("input_field", "Input Field Name", choices = NULL, multiple = TRUE, options = list(create = TRUE)),
-                 numericInput("max_tokens", "Max Tokens", value = 10),
-                 layout_columns(col_widths = c(6,6),
-                                actionButton("generate_data", "Generate Data", icon = icon("equalizer",lib = "glyphicon"), class = "btn-info"),
-                                actionButton("clear_table", "Clear Fields", icon = icon('broom'), class = "btn-info"),
+  sidebar=sidebar(
+    textInput("description", "Description (optional)", placeholder = "e.g., Windows event logs"),
+    selectizeInput("input_field", "Input Field Name", choices = NULL, multiple = TRUE, options = list(create = TRUE)),
+    numericInput("max_tokens", "Max Tokens", value = 10),
+    actionButton("generate_data", "Generate Data", icon = icon("equalizer",lib = "glyphicon"), class = "btn-info"),
+    actionButton("clear_table", "Clear Fields", icon = icon('broom'), class = "btn-info"),
+    actionButton("config", "Enter API Key", icon = icon("link", lib = "glyphicon"),
+                 # style = "color: #337ab7; background-color: #f9f9f9; border-color: #f9f9f9;"
                  ),
-                 actionButton("config", "Enter API Key", icon = icon("link", lib = "glyphicon"),
-                              # style = "color: #337ab7; background-color: #f9f9f9; border-color: #f9f9f9;"
-                              ),
-                 hr(),
-                 # theme picker
-                 layout_columns(col_widths = c(2,10),
-                                input_dark_mode(id = "dark_mode", mode = "dark"),
-                                selectInput("theme", "Select Theme", choices = c("Flatly", "Minty", "Darkly", "Cyborg", "Journal", "Litera", "Lux", "Materia", "Pulse", "Sandstone", "Simplex", "Sketchy", "Slate", "Solar", "Spacelab", "Superhero", "United", "Yeti"))
-                 ),
-                 # OpenAI model selection
-                 selectInput("model", "Select Model", choices = c("gpt-4o-mini", "gpt-4o")),
-    ),
     
-    mainPanel(
-      h3("Input Fields:"),
-      verbatimTextOutput("fields_to_gen"),
-      h3("Generated Data:"),
-      dataTableOutput("generated_data"),
-      
-      accordion(open = FALSE, 
-                accordion_panel(
-                  title = "Debug Info", icon = bs_icon("bug-fill"),
-                  verbatimTextOutput("debug_output")
-                )
-      )
-    )
+    # theme picker
+    selectInput("theme", "Select Theme", choices = c("Flatly", "Minty", "Darkly", "Cyborg", "Journal", "Litera", "Lux", "Materia", "Pulse", "Sandstone", "Simplex", "Sketchy", "Slate", "Solar", "Spacelab", "Superhero", "United", "Yeti")),
+    
+    # OpenAI model selection
+    selectInput("model", "Select Model", choices = c("gpt-4o-mini", "gpt-4o"))
+  ),
+
+  verbatimTextOutput("fields_to_gen"),
+  card(
+    title = "Generated Data",
+    status = "info",
+    width = 12,
+    solidHeader = TRUE,
+    collapsible = TRUE,
+    collapsed = TRUE,
+    dataTableOutput("generated_data")
+  ),
+    accordion(open = FALSE, 
+              accordion_panel(
+                title = "Debug Info", icon = bs_icon("bug-fill"),
+                verbatimTextOutput("debug_output")
+              )
   )
 )
 

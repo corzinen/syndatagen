@@ -5,8 +5,9 @@ account: exposurisk
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13116024
-bundleId: 9262406
+bundleId: 9267346
 url: https://exposurisk.shinyapps.io/datagen/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: www/logo.webp|www/synthetic_data_app_logo2.jpeg

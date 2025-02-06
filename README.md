@@ -1,8 +1,3 @@
----
-title: "README"
-output: html_document
----
-
 # Synthetic Data Generator with OpenAI
 
 ## Overview
@@ -85,7 +80,7 @@ To run this application locally, you need to have R and RStudio installed. Follo
 
 ## Screenshots
 
-![Synthetic Data Generator UI](screenshot.png)
+![Synthetic Data Generator UI](www/screenshot.png)
 
 ## License
 
